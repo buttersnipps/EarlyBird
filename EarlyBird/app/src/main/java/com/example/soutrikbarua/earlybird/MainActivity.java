@@ -120,6 +120,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button set_route = (Button) findViewById(R.id.setRoute);
+
+        set_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              Intent route_intent = new Intent(getApplicationContext(),RouteActivity.class);
+                startActivity(route_intent);
+            }
+        });
+
+
+
 
 
 
