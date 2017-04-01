@@ -1,9 +1,6 @@
 package com.example.soutrikbarua.earlybird;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
-
+import com.google.android.gms.maps.model.LatLng;
 
 
 /**
@@ -18,5 +15,5 @@ public class Route {
     public String startAddress;
     public LatLng startLocation;
 
-    public List<LatLng> points;
+    //public List<LatLng> points;
 }

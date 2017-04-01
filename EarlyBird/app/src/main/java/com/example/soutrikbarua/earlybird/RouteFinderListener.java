@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public interface RouteFinderListener {
-    void onDirectionFinderStart();
-    void onDirectionFinderSuccess(List<Route> route);
+    void onRouteFinderStart();
+    void onRouteFinderSuccess(List<Route> route);
 
 }

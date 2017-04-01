@@ -48,12 +48,12 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
 
     @Override
-    public void onDirectionFinderStart() {
+    public void onRouteFinderStart() {
 
     }
 
     @Override
-    public void onDirectionFinderSuccess(List<Route> route) {
+    public void onRouteFinderSuccess(List<Route> route) {
 
     }
 }

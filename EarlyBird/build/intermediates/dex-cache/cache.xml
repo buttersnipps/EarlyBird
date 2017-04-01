@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="/Users/soutrikbarua/AndroidStudioProjects/EarlyBird/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="/Users/soutrikbarua/AndroidStudioProjects/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_fa19f40acfdd30870031c1fb0c4e37c0374aa06f/classes.dex" />
+        <dex dex="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_b232a778257854028cd42927e82f79d9a2b8da0d\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/soutrikbarua/AndroidStudioProjects/EarlyBird/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="8e9be8d2b911618667f75cd74610be44d17295bd">
-        <dex dex="/Users/soutrikbarua/AndroidStudioProjects/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_3af4b099e9f40ae0f9e715df3406ee4a4c0f34f4/classes.dex" />
+        sha1="dceb21f8b77038b8fb6290e52a649b1136eb6392">
+        <dex dex="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_4c4048855423ee642dc1b1bd28f6b24e06a34bf3\classes.dex" />
     </item>
 
 </items>
