@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
-import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -148,9 +146,9 @@ public class RouteFinder {
 
 
             //Adding the route start address,end address and duration to the database
-            AsyncSaveChanges routesaves = new AsyncSaveChanges("Hello","World"
-            ,"Java");
-            routesaves.execute();
+           AsyncSaveChanges asyncSave = new AsyncSaveChanges(route.startAddress,route.endAddress
+            ,route.duration);
+            asyncSave.execute();
         }
     }
 
@@ -165,18 +163,12 @@ public class RouteFinder {
         public static final String DURATION_COLUMN ="Duration";
 
     }
-    //2)Creating a table
-    public static final String SQL_CREATE_ENTIRIES ="CREATE TABLE " + FeedEntry.TABLE_NAME + " ("
-            +FeedEntry._ID + " INTEGER PRIMARY KEY," + FeedEntry.SOURCE_COLUMN + " TEXT,"
-            + FeedEntry.DESTINATION_COLUMN+ " TEXT," + FeedEntry.DURATION_COLUMN+"TEXT )";
-    //3)Deleting a table
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
+    public static final int DB_VERSION = 2;
+    public static final String DB_NAME = "MyDatabase.db";
 
     //Obtaining references to the database
     public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
-        public static final int DB_VERSION = 1;
-        public static final String DB_NAME = "MyDatabase.db";
 
         public FeedReaderDbHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);//call the super (base) class's constructor
@@ -185,121 +177,61 @@ public class RouteFinder {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            System.out.println("Executing Query: SQL_CREATE_TABLE " + SQL_CREATE_ENTIRIES);
-            //db.execSQL(SQL_DELETE_ENTRIES);
-            //execute the query on the databse
-            db.execSQL(SQL_CREATE_ENTIRIES);
+            //System.out.println("Executing Query: SQL_CREATE_TABLE " + SQL_CREATE_ENTRIES);
+            String CREATE_ROUTES_TABLE ="CREATE TABLE " + FeedEntry.TABLE_NAME + " ("
+                    +FeedEntry._ID + " INTEGER PRIMARY KEY," + FeedEntry.SOURCE_COLUMN + " TEXT,"
+                    +FeedEntry.DESTINATION_COLUMN+ " TEXT," + FeedEntry.DURATION_COLUMN+" " +
+                    "INTEGER)";
+            db.execSQL(CREATE_ROUTES_TABLE);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // This database is only a cache for online data, so its upgrade policy is
             // to simply to discard the data and start over
-            db.execSQL(SQL_DELETE_ENTRIES);
+            final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS "+ FeedEntry.TABLE_NAME;
+            db.execSQL(SQL_DROP_TABLE);
             onCreate(db);
         }
-
     }
-
     //Async task to store the data of the route to the database
-    private class AsyncSaveChanges extends AsyncTask<String,Void,String> {
+    private class AsyncSaveChanges extends AsyncTask<String,Void,String>{
+        String Json_source;
+        String Json_destination;
+        int Json_duration;
 
-        private String Json_source;
-        private String Json_destination;
-        private String Json_duration;
 
-        public AsyncSaveChanges(String Json_source,String Json_destination,String Json_duration){
+        public AsyncSaveChanges(String Json_source, String Json_destination, Duration Json_duration){
             this.Json_source = Json_source;
             this.Json_destination = Json_destination;
-            this.Json_duration = Json_duration;
-        }
-        @Override
-        protected void onPreExecute() {
-
-
+            this.Json_duration = Json_duration.value;
         }
 
         @Override
         protected String doInBackground(String... params) {
-            if(Json_source != null){
+            if(Json_source != null)
+            {
                 try{
-                FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                ContentValues newrow = new ContentValues();
-                newrow.put(FeedEntry.SOURCE_COLUMN,Json_source);
-                newrow.put(FeedEntry.DESTINATION_COLUMN,Json_destination);
-                newrow.put(FeedEntry.DURATION_COLUMN,Json_duration);
+                    FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put(FeedEntry.SOURCE_COLUMN,Json_source);
+                    values.put(FeedEntry.DESTINATION_COLUMN,Json_destination);
+                    values.put(FeedEntry.DURATION_COLUMN,Json_duration);
 
+                    System.out.println("Writing the data to database " + Json_source + " " +
+                            Json_destination
+                            + " " +Json_duration);
 
-                System.out.println("Writing the data to database" + Json_source + " " + Json_destination
-                        + " " +Json_duration);
-
-                long newRowID = db.insert(FeedEntry.TABLE_NAME,null,newrow);
-                System.out.println("Result of database insertion " + newRowID);
-            }catch (Exception e){
-            e.printStackTrace();
-            }
-            }
-            FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-            //Define which columns to include to our query
-            String[] query_columns = {
-                    FeedEntry._ID,
-                    FeedEntry.SOURCE_COLUMN,
-                    FeedEntry.DESTINATION_COLUMN,
-                    FeedEntry.DURATION_COLUMN
-            };
-
-            //Construct a select query (String)
-            String selectQuery = FeedEntry.DESTINATION_COLUMN + " =?";
-
-            //add arguments to the selected list
-            String[] selectedList = {"Filter String"};
-
-            //define how we want the database to be ordered
-            String sortOrder = FeedEntry.DESTINATION_COLUMN + "DESC";
-
-            //from the database ..get a cursor object
-           /* Cursor cursor = db.query(
-                    FeedEntry.TABLE_NAME,
-                    query_columns,
-                    null,
-                    null,
-                    null,
-                    null,
-                    sortOrder
-            );*/
-
-            Cursor cursor = db.rawQuery("SELECT * FROM UserRoute;", null);
-            String[] columnNames = cursor.getColumnNames();
-
-            //if the database has more data move the cursor to the first object
-            boolean hasMoreData = cursor.moveToFirst();
-            list_source.clear();
-            list_destination.clear();
-            list_duration.clear();
-
-            while(hasMoreData){
-                //get the value out of each column
-                long key = cursor.getLong(cursor.getColumnIndexOrThrow(FeedEntry._ID));
-                String source = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.SOURCE_COLUMN));
-                String destination = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.DESTINATION_COLUMN));
-                String duration = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.DURATION_COLUMN));
-
-                System.out.println("Key" + key + "Source" + source + "Destination" + destination +"Duration" + duration );
-
-                //move to the next row
-                hasMoreData = cursor.moveToNext();
-                list_source.add(source);
-                list_destination.add(destination);
-                list_duration.add(duration);
+                    long newRowID = db.insert(FeedEntry.TABLE_NAME,null,values);
+                    System.out.println("Result of database insertion " + newRowID);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             return null;
         }
     }
-
-
-
 
 }

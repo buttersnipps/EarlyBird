@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_43d4be08043b33e377f9afeca0ab87fd05b7fc1d/classes.dex" />
+        <dex dex="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_b232a778257854028cd42927e82f79d9a2b8da0d\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="ad3ff3cd2aaff4cdc2c9b2f442b7a39e81e1ad0e">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c17b2e6225f26f24ac3ec185c3ae50dbb917e714/classes.dex" />
+        sha1="dceb21f8b77038b8fb6290e52a649b1136eb6392">
+        <dex dex="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_4c4048855423ee642dc1b1bd28f6b24e06a34bf3\classes.dex" />
     </item>
 
 </items>
