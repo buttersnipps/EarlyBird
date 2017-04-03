@@ -56,7 +56,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         my_source = source.getText().toString();
         my_dest = dest.getText().toString();
         try {
-            new RouteFinder(this, my_source, my_dest).execute();
+            new RouteFinder(this, my_source, my_dest,this).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

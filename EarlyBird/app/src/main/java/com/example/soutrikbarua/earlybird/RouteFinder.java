@@ -1,5 +1,6 @@
 package com.example.soutrikbarua.earlybird;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,23 +32,29 @@ import java.util.List;
  * Created by soutrikbarua on 2017-03-31.
  */
 
-public class RouteFinder extends AppCompatActivity {
+public class RouteFinder {
 
     ArrayList<String> list_source;
     ArrayList<String> list_destination;
     ArrayList<String> list_duration;
     List<Route> routes;
-    Route route;
+    //Route route;
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
     private static final String GOOGLE_API_KEY ="AIzaSyCb14xML7qnQ4AXGQ5ymUzgQwSmvcGa3IE";
     private RouteFinderListener listener;
     private String origin;
     private String destination;
+    private Activity activity;
 
-    public RouteFinder(RouteFinderListener listener,String origin,String destination){
+    public RouteFinder(RouteFinderListener listener, String origin, String destination , Activity activity){
+
+        list_source = new ArrayList<>();
+        list_destination = new ArrayList<>();
+        list_duration = new ArrayList<>();
         this.listener = listener;
         this.origin=origin;
         this.destination=destination;
+        this.activity = activity;
     }
 
     public void execute() throws UnsupportedEncodingException {
@@ -113,7 +120,7 @@ public class RouteFinder extends AppCompatActivity {
         for (int i=0;i<jsonRoutes.length();i++)
         {
             JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
-             route = new Route();
+             Route route = new Route();
 
             /*
              * This is where we retrieve the data from the JSON file we downloaded from google maps.
@@ -139,9 +146,10 @@ public class RouteFinder extends AppCompatActivity {
 
             routes.add(route);
 
+
             //Adding the route start address,end address and duration to the database
-            AsyncSaveChanges routesaves = new AsyncSaveChanges(route.startAddress.toString(),route.endAddress.toString()
-            ,route.duration.toString());
+            AsyncSaveChanges routesaves = new AsyncSaveChanges("Hello","World"
+            ,"Java");
             routesaves.execute();
         }
     }
@@ -151,7 +159,7 @@ public class RouteFinder extends AppCompatActivity {
 
     // 1)Defining the schema
     public static class FeedEntry implements BaseColumns {
-        public static final String TABLE_NAME ="User Route";
+        public static final String TABLE_NAME ="UserRoute";
         public static final String SOURCE_COLUMN ="Source";
         public static final String DESTINATION_COLUMN = "Destination";
         public static final String DURATION_COLUMN ="Duration";
@@ -178,6 +186,7 @@ public class RouteFinder extends AppCompatActivity {
         @Override
         public void onCreate(SQLiteDatabase db) {
             System.out.println("Executing Query: SQL_CREATE_TABLE " + SQL_CREATE_ENTIRIES);
+            //db.execSQL(SQL_DELETE_ENTRIES);
             //execute the query on the databse
             db.execSQL(SQL_CREATE_ENTIRIES);
         }
@@ -206,26 +215,32 @@ public class RouteFinder extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+
+
         }
 
         @Override
         protected String doInBackground(String... params) {
             if(Json_source != null){
-                FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(getApplicationContext());
+                try{
+                FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 ContentValues newrow = new ContentValues();
                 newrow.put(FeedEntry.SOURCE_COLUMN,Json_source);
                 newrow.put(FeedEntry.DESTINATION_COLUMN,Json_destination);
                 newrow.put(FeedEntry.DURATION_COLUMN,Json_duration);
 
+
                 System.out.println("Writing the data to database" + Json_source + " " + Json_destination
                         + " " +Json_duration);
 
                 long newRowID = db.insert(FeedEntry.TABLE_NAME,null,newrow);
                 System.out.println("Result of database insertion " + newRowID);
+            }catch (Exception e){
+            e.printStackTrace();
             }
-            FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(getApplicationContext());
+            }
+            FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
             //Define which columns to include to our query
@@ -246,7 +261,7 @@ public class RouteFinder extends AppCompatActivity {
             String sortOrder = FeedEntry.DESTINATION_COLUMN + "DESC";
 
             //from the database ..get a cursor object
-            Cursor cursor = db.query(
+           /* Cursor cursor = db.query(
                     FeedEntry.TABLE_NAME,
                     query_columns,
                     null,
@@ -254,7 +269,10 @@ public class RouteFinder extends AppCompatActivity {
                     null,
                     null,
                     sortOrder
-            );
+            );*/
+
+            Cursor cursor = db.rawQuery("SELECT * FROM UserRoute;", null);
+            String[] columnNames = cursor.getColumnNames();
 
             //if the database has more data move the cursor to the first object
             boolean hasMoreData = cursor.moveToFirst();
