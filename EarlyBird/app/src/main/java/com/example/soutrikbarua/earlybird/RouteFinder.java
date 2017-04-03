@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.RowId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,8 +148,20 @@ public class RouteFinder {
 
 
             //Adding the route start address,end address and duration to the database
+            /**
+             * Use the fourth parameter to pass what database action needs to be done.
+             * Create = 1
+             * Read = 2 (Read One, must pass Id with it)
+             *        3 (Read All, No Id required)
+             * Update = 4 (Update One, Id Required)
+             * Delete = 5 (Delete One, Id Required)
+             *
+             * The fifth variables holds the Id of the row that needs to be Updated/Read/Deleted.
+             * Send the Id accordingly or send zero when none of the operations are needed to be
+             * done.
+             */
            AsyncSaveChanges asyncSave = new AsyncSaveChanges(route.startAddress,route.endAddress
-            ,route.duration);
+            ,route.duration,1,0);
             asyncSave.execute();
         }
     }
@@ -199,39 +213,183 @@ public class RouteFinder {
         String Json_source;
         String Json_destination;
         int Json_duration;
+        int code;
+        int rowId;
+        //Database stuff
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
+        SQLiteDatabase db;
+        List<Long> userRoutes = new ArrayList<>();
+        String[] user_routes = {
+                FeedEntry._ID,
+                FeedEntry.SOURCE_COLUMN,
+                FeedEntry.DESTINATION_COLUMN,
+                FeedEntry.DURATION_COLUMN
+        };
+        Route oneRoute;
 
-
-        public AsyncSaveChanges(String Json_source, String Json_destination, Duration Json_duration){
+        /**
+         * Use the fourth parameter to pass what database action needs to be done.
+         * Create = 1
+         * Read = 2 (Read One, must pass Id with it)
+         *        3 (Read All, No Id required)
+         * Update = 4 (Update One, Id Required)
+         * Delete = 5 (Delete One, Id Required)
+         *
+         * The fifth variables holds the Id of the row that needs to be Updated/Read/Deleted.
+         * Send the Id accordingly or send zero when none of the operations are needed to be
+         * done.
+         */
+        public AsyncSaveChanges(String Json_source, String Json_destination, Duration
+                Json_duration,int action_code, int rowNum){
             this.Json_source = Json_source;
             this.Json_destination = Json_destination;
             this.Json_duration = Json_duration.value;
+            this.code = action_code;
+            this.rowId = rowNum;
+        }
+
+        /**
+         * Get one specific user route after calling the asynctask case statement 2
+         */
+        public Route getOneRoute()
+        {
+            return oneRoute;
+        }
+
+        /**
+         * Get all user routes after calling the asynctask case statement 3
+         */
+        public List<Long> getAllUserRoutes()
+        {
+            return userRoutes;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            dbHelper.close();
+
         }
 
         @Override
         protected String doInBackground(String... params) {
-            if(Json_source != null)
-            {
-                try{
-                    FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues values = new ContentValues();
-                    values.put(FeedEntry.SOURCE_COLUMN,Json_source);
-                    values.put(FeedEntry.DESTINATION_COLUMN,Json_destination);
-                    values.put(FeedEntry.DURATION_COLUMN,Json_duration);
 
-                    System.out.println("Writing the data to database " + Json_source + " " +
-                            Json_destination
-                            + " " +Json_duration);
+            ContentValues values = new ContentValues();
+            try{
 
-                    long newRowID = db.insert(FeedEntry.TABLE_NAME,null,values);
-                    System.out.println("Result of database insertion " + newRowID);
+                switch (code)
+                {
+                    //Create
+                    case 1:
+                    {
+                        if(Json_source != null)
+                        {
+                            db = dbHelper.getWritableDatabase();
+                            values.put(FeedEntry.SOURCE_COLUMN,Json_source);
+                            values.put(FeedEntry.DESTINATION_COLUMN,Json_destination);
+                            values.put(FeedEntry.DURATION_COLUMN,Json_duration);
+
+                            System.out.println("Writing the data to database " + Json_source + " " +
+                                    Json_destination
+                                    + " " +Json_duration);
+
+                            long newRowID = db.insert(FeedEntry.TABLE_NAME,null,values);
+                            System.out.println("Result of database insertion " + newRowID);
+
+                        }
+                        break;
+                    }
+
+                    //Read One
+                    case 2:
+                    {
+                        Cursor cursor = null;
+                        Route one_route= new Route();
+                        //Read One Code
+                        if(rowId !=0 && rowId > 0)
+                        {
+                           try {
+                               cursor = db.rawQuery("SELECT * FROM"+ FeedEntry.TABLE_NAME + " " +
+                                       "WHERE _ID=? ",new String[] {rowId+""} );
+                                if(cursor.getCount() >0){
+                                    cursor.moveToFirst();
+                                    one_route.startAddress = cursor.getString(cursor
+                                            .getColumnIndex("source"));
+                                    one_route.endAddress = cursor.getString(cursor
+                                            .getColumnIndex("destination"));
+                                    one_route.duration.value = Integer.parseInt(cursor.getString(cursor
+                                            .getColumnIndex("duration")));
+                                    oneRoute = one_route;
+                                }
+                           }finally {
+                               cursor.close();
+                           }
+
+                        }
+                        break;
+                    }
+
+                    //Read All
+                    case 3:
+                    {
+                        //Read All Code
+                        Cursor cursor = db.query(
+                                FeedEntry.TABLE_NAME,
+                                user_routes,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                        );
+
+                        while(cursor.moveToNext())
+                        {
+                            long itemId = cursor.getLong(
+                                    cursor.getColumnIndexOrThrow(FeedEntry._ID));
+                            userRoutes.add(itemId);
+                        }
+                        cursor.close();
+
+                        break;
+                    }
+
+                    //Update (One)
+                    case 4:
+                    {
+                        //Update code
+                        if(rowId !=0 && rowId > 0)
+                        {
+
+                        }
+                        break;
+                    }
+                    //Delete (One)
+                    case 5:
+                    {
+                        //Delete code
+                        if(rowId !=0 && rowId > 0)
+                        {
+                            db.delete(FeedEntry.TABLE_NAME, FeedEntry._ID + "= ?", new String[]
+                                    {rowId+""});
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        Log.e("Error occurred: "," Inside RouteFinder class database CRUD operation");
+                    }
                 }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
+
+                //Always remember to close database connection.
+
             }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
             return null;
         }
     }
-
 }
