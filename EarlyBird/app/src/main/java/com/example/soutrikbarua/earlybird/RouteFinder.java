@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.util.Log;
+import android.widget.Adapter;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -38,6 +39,7 @@ public class RouteFinder {
     ArrayList<String> list_destination;
     ArrayList<String> list_duration;
     List<Route> routes;
+    private RouteAdapter adapter;
     //Route route;
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
     private static final String GOOGLE_API_KEY ="AIzaSyCb14xML7qnQ4AXGQ5ymUzgQwSmvcGa3IE";
@@ -146,6 +148,8 @@ public class RouteFinder {
 
             routes.add(route);
 
+           // adapter = new RouteAdapter(this,route.startAddress,route.endAddress);
+
 
             //Adding the route start address,end address and duration to the database
             /**
@@ -209,7 +213,7 @@ public class RouteFinder {
         }
     }
     //Async task to store the data of the route to the database
-    private class AsyncSaveChanges extends AsyncTask<String,Void,String>{
+    public class AsyncSaveChanges extends AsyncTask<String,Void,String>{
         String Json_source;
         String Json_destination;
         int Json_duration;
@@ -218,7 +222,7 @@ public class RouteFinder {
         //Database stuff
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(activity);
         SQLiteDatabase db;
-        List<Long> userRoutes = new ArrayList<>();
+        List<UserRouteDetail> userRoutes = new ArrayList<>();
         String[] user_routes = {
                 FeedEntry._ID,
                 FeedEntry.SOURCE_COLUMN,
@@ -259,7 +263,7 @@ public class RouteFinder {
         /**
          * Get all user routes after calling the asynctask case statement 3
          */
-        public List<Long> getAllUserRoutes()
+        public List<UserRouteDetail> getAllUserRoutes()
         {
             return userRoutes;
         }
@@ -346,9 +350,19 @@ public class RouteFinder {
 
                         while(cursor.moveToNext())
                         {
-                            long itemId = cursor.getLong(
+                            int itemId = cursor.getInt(
                                     cursor.getColumnIndexOrThrow(FeedEntry._ID));
-                            userRoutes.add(itemId);
+                            String item_src=cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.SOURCE_COLUMN));
+                            String item_des=cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.DESTINATION_COLUMN));
+                            String item_dur = cursor.getString(
+                                    cursor.getColumnIndexOrThrow(FeedEntry.DURATION_COLUMN));
+
+                            UserRouteDetail item = new UserRouteDetail();
+                            item.id = itemId;
+                            item.src = item_src;
+                            item.des = item_des;
+                            item.duration = Integer.parseInt(item_dur);
+                            userRoutes.add(item);
                         }
                         cursor.close();
 
