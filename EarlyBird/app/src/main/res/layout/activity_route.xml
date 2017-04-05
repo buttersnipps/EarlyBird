@@ -25,11 +25,17 @@
             android:layout_height="61dp"
             android:hint="Enter Destination Location"/>
 
+    <Button
+        android:id="@+id/addRoute"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Set Route"/>
+
         <Button
-            android:id="@+id/setRoute"
+            android:id="@+id/viewAll"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Set Route" />
+            android:text="View All Routes"/>
 
-    </LinearLayout>
+</LinearLayout>
 

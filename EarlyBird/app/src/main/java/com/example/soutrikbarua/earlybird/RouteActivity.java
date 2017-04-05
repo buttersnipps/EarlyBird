@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -401,12 +403,18 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(null,null,null,this);
         asyncSaveChanges.execute();
 
-        Button my_route = (Button)findViewById(R.id.setRoute);
+        Button addRoute = (Button)findViewById(R.id.addRoute);
+        Button viewRoutes = (Button) findViewById(R.id.viewAll);
 
-        my_route.setOnClickListener(new View.OnClickListener() {
+        addRoute.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 sendRequest();
+            }
+        });
+        viewRoutes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
                 Intent route_list_intent = new Intent(getApplicationContext(),RouteList.class);
                 Bundle bundle = new Bundle();

@@ -3,111 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/57c6e958797cc9afb34ceb77577c8c4e529e15bf/output/jars/classes.jar"
+        jar="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="0d191c1a09e4892d059e5ce749e4ad4e08129e35">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_00d8b7bc7401c114c8fd5352b417f7d8c403bc32/classes.dex" />
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_b232a778257854028cd42927e82f79d9a2b8da0d\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/9de92461868662316d3b964664e77200734d5a55/output/jars/classes.jar"
+        jar="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_10115e09e95e19d0d84aab316ceb42b3307d4088/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/b3b1bb8d55f399f7099139d8b187992854b218bb/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="0fb891e8f0cfba0513043a7bb357513d229ca2cd">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_f6014dee598cac8f5979401706b7bf182f484e63/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/98c8068275959e2797866566ae64a228c8a24f8f/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="02741d05d4b697fba5e279e9881aaa1da0ca7c7f">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_f6591390a7b5050bb35161c9884f16504bc29c27/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/725c5e0eec6e636683ddbcb5b43152271c63953c/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_a0eef2779322ea0089affcb6b0946b88923cc836/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/173402afb87d86a731a35e0cf9cf290b796d7887/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_fd19e3e9f3dd0d8c87ca22572d72486425b616b8/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.1/support-annotations-25.1.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="b59b6ee8d6ecc03e672d253800430343493a6ed8">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.1.1_6b482971cecb43e2d3c99e55cf06f6c3c6fa6188/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/e27d28122b90bb7875927c2b06411bd4fe1aa114/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="3e04ac8ca644ea7baddf6fdcf72e15c79e9df94a">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_0aa4c05a4e1c53c20371edfbe142e39548ce62fc/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/0a9d18832e208ed20337da7c71ada5c952ff9f37/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="ecb496cc08dd52551fc5ec6db3bc0632e95a89bb">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_28088981bb520e4c1bac689f9f7296703e2b181d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/.android/build-cache/de97c101a02de7f182067a037f510bea42782ec8/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7bd67e5ecd4f93c8e2906f6629c6bc74a68972a0/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_43d4be08043b33e377f9afeca0ab87fd05b7fc1d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="99593a5c67971e29f8f5b59b44d5338839cf5d37">
-        <dex dex="/Users/soutrikbarua/Desktop/GitHub/EarlyBird/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c17b2e6225f26f24ac3ec185c3ae50dbb917e714/classes.dex" />
+        sha1="5deb63cb0b948c602a5319ba1ea124562d53c5e0">
+        <dex dex="D:\GitRepositories\EarlyBird\EarlyBird\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_4c4048855423ee642dc1b1bd28f6b24e06a34bf3\classes.dex" />
     </item>
 
 </items>
