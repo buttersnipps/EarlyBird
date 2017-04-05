@@ -191,7 +191,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
         }
         AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(route.startAddress,route.endAddress
-                ,route.duration.toString(),this);
+                ,String.valueOf(route.duration.value),this);
         asyncSaveChanges.execute();
 
     }
