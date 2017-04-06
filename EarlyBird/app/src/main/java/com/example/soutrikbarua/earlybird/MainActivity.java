@@ -81,18 +81,21 @@ public class MainActivity extends AppCompatActivity {
 
                 //create a pending intent that delays the intent
                 //until the specified calender time
-                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarm_intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-               // pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarm_intent,0);
+                //pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarm_intent,
+                // PendingIntent.FLAG_UPDATE_CURRENT);
+                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,
+                        alarm_intent,0);
                 //set the alarm manager
                 //alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
                 // pendingIntent);
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-20000,
-                        pendingIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000), pendingIntent);
+               /* alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000),2000,                        pendingIntent);*/
 
 
                 Toast.makeText(getApplicationContext(),"Alarm set to " + hour_string+ ":"
                         +minutes_string,Toast.LENGTH_LONG).show();
+
+
 
             }
         });
