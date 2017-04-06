@@ -28,7 +28,8 @@
         android:id="@+id/setAlarm"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Set Alarm" />
+        android:text="Set Alarm"/>
+
     <Button
         android:id="@+id/setRoute"
         android:layout_width="100dp"

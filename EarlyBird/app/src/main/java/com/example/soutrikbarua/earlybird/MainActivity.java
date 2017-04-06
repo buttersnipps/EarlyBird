@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY,timePicker.getHour());
                 calendar.set(Calendar.MINUTE,timePicker.getMinute());
 
+
                 //get the value of the hours and minutes
                 int hour = timePicker.getHour();
                 int minutes =timePicker.getMinute();
@@ -80,18 +81,18 @@ public class MainActivity extends AppCompatActivity {
 
                 //create a pending intent that delays the intent
                 //until the specified calender time
-                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,
-                        alarm_intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
+                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarm_intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+               // pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarm_intent,0);
                 //set the alarm manager
-                alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-
+                //alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+                // pendingIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-20000,
+                        pendingIntent);
 
 
                 Toast.makeText(getApplicationContext(),"Alarm set to " + hour_string+ ":"
                         +minutes_string,Toast.LENGTH_LONG).show();
-
-
 
             }
         });
