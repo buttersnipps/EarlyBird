@@ -51,20 +51,19 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
     ArrayList<String> list_source;
     ArrayList<String> list_destination;
     ArrayList<String> list_duration;
-    Activity activity;
 
     public class RouteFinder{
         ArrayList<String> list_source;
         ArrayList<String> list_destination;
         ArrayList<String> list_duration;
-        private RouteAdapter adapter;
+        Activity activity;
         //Route route;
         private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
         private static final String GOOGLE_API_KEY ="AIzaSyCb14xML7qnQ4AXGQ5ymUzgQwSmvcGa3IE";
         private RouteFinderListener listener;
         private String origin;
         private String destination;
-        private Activity activity;
+
 
         public RouteFinder(RouteFinderListener listener, String origin, String destination , Activity activity){
 
@@ -79,7 +78,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
         public void execute() throws UnsupportedEncodingException {
             listener.onRouteFinderStart();
-            //new com.example.soutrikbarua.earlybird.RouteFinder.DownloadRawData().execute(createUrl());
+
             new DownloadRawData().execute(createUrl());
         }
         private String createUrl() throws UnsupportedEncodingException {
@@ -90,7 +89,6 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         }
 
     }
-
 
     public class DownloadRawData extends AsyncTask<String,Void,String>{
 
@@ -132,7 +130,12 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         }
     }
 
-
+    /**
+     * This is the method that parse the Json to be used by the local SQL database
+     * Sets the Start and End addresses and the duration of the trip
+     * @param data
+     * @throws JSONException
+     */
     private void JSONparser (String data) throws JSONException
     {
         if (data==null)
@@ -173,10 +176,6 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
                     .getDouble("lng"));
 
             routes.add(route);
-
-             //adapter = new RouteAdapter(this,route.startAddress,route.endAddress,route.duration);
-
-
             //Adding the route start address,end address and duration to the database
             /**
              * Use the fourth parameter to pass what database action needs to be done.
@@ -193,9 +192,38 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
         }
         AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(route.startAddress,route.endAddress
-                ,String.valueOf(route.duration.value),this);
+                ,String.valueOf(route.duration.text),this);
         asyncSaveChanges.execute();
 
+    }
+
+    public int JsonDurationParser(String data) throws JSONException{
+        int tempDuration = 0;
+        if (data==null)
+        {
+            return tempDuration;
+        }
+
+        JSONObject jsonData = new JSONObject(data);
+        JSONArray jsonRoutes  = jsonData.getJSONArray("routes");
+        for (int i=0;i<jsonRoutes.length();i++)
+        {
+            JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
+            /*
+             * This is where we retrieve the data from the JSON file we downloaded from google maps.
+             */
+            //JSONObject overview_polyline_json = jsonRoute.getJSONObject("overview_polyline");
+            JSONArray legs_json = jsonRoute.getJSONArray("legs");
+            JSONObject leg_json = legs_json.getJSONObject(0);
+            JSONObject duration_json = leg_json.getJSONObject("duration");
+            tempDuration= duration_json.getInt("value");
+
+        }
+        return tempDuration;
+    }
+
+    public int calculateDurationDifference(int databaseValue,int realtimeValue){
+        return 0;
     }
 
 //SQL database part
@@ -250,13 +278,6 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         //Database stuff
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(getApplicationContext());
         SQLiteDatabase db;
-        List<UserRouteDetail> userRoutes = new ArrayList<>();
-        String[] user_routes = {
-                FeedEntry._ID,
-                FeedEntry.SOURCE_COLUMN,
-                FeedEntry.DESTINATION_COLUMN,
-                FeedEntry.DURATION_COLUMN
-        };
         Route oneRoute;
         Activity activity;
 
@@ -289,20 +310,12 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
             return oneRoute;
         }
 
-        /**
-         * Get all user routes after calling the asynctask case statement 3
-         */
-        public List<UserRouteDetail> getAllUserRoutes()
-        {
-            return userRoutes;
-        }
-
 
         @Override
         protected void onPostExecute(String s) {
                 adapter.notifyDataSetChanged();
             super.onPostExecute(s);
-           // dbHelper.close();
+            dbHelper.close();
 
         }
 
@@ -362,18 +375,6 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
                     list_destination.add(destination);
                     list_duration.add(duration);
                 }
-                //Always remember to close database connection.
-               /* Intent route_list_intent = new Intent(getApplicationContext(),RouteList.class);
-
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("List1",list_duration);
-                bundle.putStringArrayList("List2",list_destination);
-                bundle.putStringArrayList("List3",list_source);
-
-                route_list_intent.putExtra("lists",bundle);
-
-                startActivity(route_list_intent);*/
-
             }
             catch (Exception e){
                 e.printStackTrace();
