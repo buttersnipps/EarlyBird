@@ -4,16 +4,22 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.StreamHandler;
 
@@ -39,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Create Instance of a Calender
         final Calendar calendar = Calendar.getInstance();
+
+      /*  SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String data = pref.getString("string_id","no id");*/
+        String data = getIntent().getStringExtra("My data");
+
+
+        TextView mydata = (TextView)findViewById(R.id.myRoute);
+        mydata.setText(data);
 
 
         //Create an intent to the Alarm_Manager class
@@ -118,6 +132,33 @@ public class MainActivity extends AppCompatActivity {
                 sendBroadcast(alarm_intent);
 
 
+            }
+        });
+        ArrayList<String> list_source;
+        ArrayList<String> list_destination;
+        ArrayList<String> list_duration;
+        RouteAdapter adapter;
+        list_duration = new ArrayList<>();
+        list_destination = new ArrayList<>();
+        list_source = new ArrayList<>();
+        adapter = new RouteAdapter(this,list_source,list_destination,list_duration);
+
+        final Bundle bundle = new Bundle();
+        bundle.putStringArrayList("List1",list_duration);
+        bundle.putStringArrayList("List2",list_destination);
+        bundle.putStringArrayList("List3",list_source);
+
+
+
+        Button pick_route =(Button) findViewById(R.id.routePick);
+
+        pick_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pick_route = new Intent(getApplicationContext(),RouteList.class);
+
+                pick_route.putExtra("lists",bundle);
+                startActivity(pick_route);
             }
         });
 

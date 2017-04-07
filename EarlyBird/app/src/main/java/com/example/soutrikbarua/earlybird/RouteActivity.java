@@ -414,6 +414,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
             catch (Exception e){
                 e.printStackTrace();
             }
+            db.close();
             return null;
         }
 

@@ -3,6 +3,8 @@ package com.example.soutrikbarua.earlybird;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,12 +72,22 @@ public class RouteAdapter extends BaseAdapter {
                 String output = "From " + source + " To "+ destination;
 
                 Route obj = new Route();
-                obj.duration.value = Integer.parseInt(durationArray.get(position));
+               // obj.duration.value = Integer.parseInt(durationArray.get(position));
                 obj.startAddress = sourceArray.get(position);
                 obj.endAddress = destinationArray.get(position);
 
-/*                Intent routeSetIntent = new Intent(v.getContext(),MainActivity.class);
-                routeSetIntent.putExtra("route",(Serializable) obj);*/
+
+               /* SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(v.getContext());
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("string_id",output);
+                editor.commit();*/
+                Intent routeSetIntent = new Intent(v.getContext(),MainActivity.class);
+               // routeSetIntent.putExtra("route",(Serializable) obj);
+                routeSetIntent.putExtra("My data",output);
+                mActivity.startActivity(routeSetIntent);
+
+
+
                 Log.e("row data:", String.valueOf(rowPosition) + "duration: " + String.valueOf(durationArray.get(position)) + " Route: " + output);}});
         return row;
     }
