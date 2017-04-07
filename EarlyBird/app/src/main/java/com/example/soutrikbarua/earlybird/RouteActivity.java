@@ -180,8 +180,8 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
             /**
              * Use the fourth parameter to pass what database action needs to be done.
              * Create = 1
-             * Read = 2 (Read One, must pass Id with it)
-             *        3 (Read All, No Id required)
+             * Read =   2 (Read One, must pass Id with it)
+             *          3 (Read All, No Id required)
              * Update = 4 (Update One, Id Required)
              * Delete = 5 (Delete One, Id Required)
              *
@@ -192,7 +192,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
         }
         AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(route.startAddress,route.endAddress
-                ,String.valueOf(route.duration.text),this);
+                ,String.valueOf(route.duration),this);
         asyncSaveChanges.execute();
 
     }
@@ -222,9 +222,44 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         return tempDuration;
     }
 
-    public int calculateDurationDifference(int databaseValue,int realtimeValue){
+    /**
+     *
+     * @param databaseValue int value in seconds
+     * @param realTimeValue int value in seconds
+     * @return
+     */
+    public int calculateDurationDifference(int databaseValue,int realTimeValue){
+        int seconds = realTimeValue - databaseValue;
+        if(seconds>0)
+        {
+            return seconds;
+        }
         return 0;
     }
+
+    public String ConvertToHrsAndMin(int timeInSec)
+    {
+
+        String time;
+        int seconds = timeInSec;
+        int hours = seconds/3600;
+        seconds = seconds%3600;
+        int minutes = seconds/60;
+        time = hours+" ";
+        if(hours>1)
+        {
+            time = time + "hrs ";
+        }
+        else
+        {
+            time = time + "hr ";
+        }
+
+        time = time + minutes +" min";
+        return time;
+
+    }
+
 
 //SQL database part
 

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/mytoolbar"
         android:layout_width="match_parent"
@@ -16,25 +17,70 @@
         android:layout_width="wrap_content"
         android:layout_height="350dp"
         android:headerBackground="@color/colorPrimaryDark"
-        android:numbersSelectorColor="@color/colorPrimaryDark" />
+        android:numbersSelectorColor="@color/colorPrimaryDark"/>
 
-    <Button
-        android:id="@+id/stopAlarm"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Dismiss" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/setAlarm"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Set Alarm"/>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected Route:"/>
 
-    <Button
-        android:id="@+id/setRoute"
-        android:layout_width="100dp"
+        <TextView
+            android:id="@+id/selectedRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:text="Data"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Set Route" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/stopAlarm"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dismiss"/>
+
+        <Button
+            android:id="@+id/routePick"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pick Route"/>
+
+        <Button
+            android:id="@+id/setAlarm"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Set Alarm"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/setRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Route"
+            android:layout_weight="0.10"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -89,14 +89,11 @@ public class MainActivity extends AppCompatActivity {
                 //alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
                 // pendingIntent);
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000), pendingIntent);
-               /* alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000),2000,                        pendingIntent);*/
+               /* alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000),2000,pendingIntent);*/
 
 
                 Toast.makeText(getApplicationContext(),"Alarm set to " + hour_string+ ":"
                         +minutes_string,Toast.LENGTH_LONG).show();
-
-
-
             }
         });
 
