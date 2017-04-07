@@ -38,6 +38,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class RouteActivity extends AppCompatActivity implements RouteFinderListener{
@@ -47,10 +48,12 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
     String my_source;
     String my_dest;
     List<Route> routes;
-    private RouteAdapter adapter;
+    private RouteAdapter route_adapter;
     ArrayList<String> list_source;
     ArrayList<String> list_destination;
     ArrayList<String> list_duration;
+
+
 
     public class RouteFinder{
         ArrayList<String> list_source;
@@ -302,6 +305,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
             db.execSQL(SQL_DROP_TABLE);
             onCreate(db);
         }
+
     }
     //Async task to store the data of the route to the database
     public class AsyncSaveChanges extends AsyncTask<String,Void,String>{
@@ -348,7 +352,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
         @Override
         protected void onPostExecute(String s) {
-                adapter.notifyDataSetChanged();
+                route_adapter.notifyDataSetChanged();
             super.onPostExecute(s);
             dbHelper.close();
 
@@ -414,7 +418,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
             catch (Exception e){
                 e.printStackTrace();
             }
-            db.close();
+
             return null;
         }
 
@@ -426,6 +430,8 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
+        int flag=0;
+        flag = getIntent().getIntExtra("flag",flag);
 
          source = (AutoCompleteTextView)findViewById(R.id.source_text);
          dest = (AutoCompleteTextView)findViewById(R.id.destination_text);
@@ -435,21 +441,37 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         list_duration = new ArrayList<>();
         list_destination = new ArrayList<>();
         list_source = new ArrayList<>();
-        adapter = new RouteAdapter(this,list_source,list_destination,list_duration);
+        route_adapter = new RouteAdapter(this,list_source,list_destination,list_duration);
 
         AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(null,null,null,this);
-        asyncSaveChanges.execute();
-
+        try {
+            asyncSaveChanges.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        //add pause here
         Button addRoute = (Button)findViewById(R.id.addRoute);
-        Button viewRoutes = (Button) findViewById(R.id.viewAll);
+//        Button viewRoutes = (Button) findViewById(R.id.viewAll);
+        if(flag == 1)
+        {
+            Intent route_list_intent = new Intent(getApplicationContext(),RouteList.class);
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("List1",list_duration);
+            bundle.putStringArrayList("List2",list_destination);
+            bundle.putStringArrayList("List3",list_source);
 
+            route_list_intent.putExtra("lists",bundle);
+            startActivity(route_list_intent);
+        }
         addRoute.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 sendRequest();
             }
         });
-        viewRoutes.setOnClickListener(new View.OnClickListener() {
+/*        viewRoutes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -463,7 +485,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
                 startActivity(route_list_intent);
 
             }
-        });
+        });*/
 
     }
 

@@ -31,11 +31,11 @@
         android:layout_height="wrap_content"
         android:text="Set Route"/>
 
-        <Button
+<!--        <Button
             android:id="@+id/viewAll"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="View All Routes"/>
+            android:text="View All Routes"/>-->
 
 </LinearLayout>
 

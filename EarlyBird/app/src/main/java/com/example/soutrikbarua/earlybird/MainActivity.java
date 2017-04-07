@@ -143,11 +143,13 @@ public class MainActivity extends AppCompatActivity {
         list_source = new ArrayList<>();
         adapter = new RouteAdapter(this,list_source,list_destination,list_duration);
 
+//        RouteActivity routeActivity = new RouteActivity();
+//        routeActivity.executeAsync();
         final Bundle bundle = new Bundle();
         bundle.putStringArrayList("List1",list_duration);
         bundle.putStringArrayList("List2",list_destination);
         bundle.putStringArrayList("List3",list_source);
-
+        adapter.notifyDataSetChanged();
 
 
         Button pick_route =(Button) findViewById(R.id.routePick);
@@ -155,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
         pick_route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent pick_route = new Intent(getApplicationContext(),RouteList.class);
+                Intent pick_route = new Intent(getApplicationContext(),RouteActivity.class);
 
-                pick_route.putExtra("lists",bundle);
+                pick_route.putExtra("flag",1);
                 startActivity(pick_route);
             }
         });
