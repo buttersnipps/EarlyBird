@@ -200,6 +200,13 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
     }
 
+    /**
+     * This function will send request to the Google directions API to fetch the current duration of the set route
+     * @param data
+     * @return
+     * @throws JSONException
+     */
+
     public int JsonDurationParser(String data) throws JSONException{
         int tempDuration = 0;
         if (data==null)

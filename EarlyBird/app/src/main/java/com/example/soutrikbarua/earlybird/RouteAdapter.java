@@ -69,7 +69,8 @@ public class RouteAdapter extends BaseAdapter {
                 int rowPosition = position;
                 String source = sourceArray.get(position);
                 String destination =destinationArray.get(position);
-                String output = "From " + source + " To "+ destination;
+                String duration =durationArray.get(position);
+                //String output = "From " + source + " To "+ destination;
 
                 Route obj = new Route();
                // obj.duration.value = Integer.parseInt(durationArray.get(position));
@@ -83,12 +84,15 @@ public class RouteAdapter extends BaseAdapter {
                 editor.commit();*/
                 Intent routeSetIntent = new Intent(v.getContext(),MainActivity.class);
                // routeSetIntent.putExtra("route",(Serializable) obj);
-                routeSetIntent.putExtra("My data",output);
+                routeSetIntent.putExtra("Source",source);
+                routeSetIntent.putExtra("Destination",destination);
+                routeSetIntent.putExtra("My time",duration);
                 mActivity.startActivity(routeSetIntent);
 
 
 
-                Log.e("row data:", String.valueOf(rowPosition) + "duration: " + String.valueOf(durationArray.get(position)) + " Route: " + output);}});
+               // Log.e("row data:", String.valueOf(rowPosition) + "duration: " + String.valueOf(durationArray.get(position)) + " Route: " + output);
+            }});
         return row;
     }
 }
