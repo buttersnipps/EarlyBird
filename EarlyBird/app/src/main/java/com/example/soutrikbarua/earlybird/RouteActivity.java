@@ -190,7 +190,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
         }
         AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(route.startAddress,route.endAddress
-                ,String.valueOf(route.duration),this);
+                ,(route.duration.value),this);
         asyncSaveChanges.execute();
 
     }
@@ -244,7 +244,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
     public class AsyncSaveChanges extends AsyncTask<String,Void,String>{
         String Json_source;
         String Json_destination;
-        String Json_duration;
+        int Json_duration;
         int code;
         int rowId;
         //Database stuff
@@ -265,7 +265,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
          * Send the Id accordingly or send zero when none of the operations are needed to be
          * done.
          */
-        public AsyncSaveChanges(String Json_source, String Json_destination, String
+        public AsyncSaveChanges(String Json_source, String Json_destination, int
                 Json_duration, Activity activity){
             this.Json_source = Json_source;
             this.Json_destination = Json_destination;
@@ -376,7 +376,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         list_source = new ArrayList<>();
         route_adapter = new RouteAdapter(this,list_source,list_destination,list_duration);
 
-        AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(null,null,null,this);
+        AsyncSaveChanges asyncSaveChanges = new AsyncSaveChanges(null,null,0,this);
         try {
             asyncSaveChanges.execute().get();
         } catch (InterruptedException e) {
