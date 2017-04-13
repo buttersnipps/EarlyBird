@@ -33,6 +33,28 @@ public class RouteAdapter extends BaseAdapter {
         this.durationArray=duration;
 
     }
+    public String ConvertToHrsAndMin(int timeInSec)
+    {
+
+        String time;
+        int seconds = timeInSec;
+        int hours = seconds/3600;
+        seconds = seconds%3600;
+        int minutes = seconds/60;
+        time = hours+" ";
+        if(hours>1)
+        {
+            time = time + "hrs ";
+        }
+        else
+        {
+            time = time + "hr ";
+        }
+
+        time = time + minutes +" min";
+        return time;
+
+    }
 
     @Override
     public int getCount() {
@@ -61,7 +83,7 @@ public class RouteAdapter extends BaseAdapter {
 
         source.setText(this.sourceArray.get(position));
         destination.setText(this.destinationArray.get(position));
-        duration.setText(this.durationArray.get(position));
+        duration.setText(ConvertToHrsAndMin(Integer.parseInt(this.durationArray.get(position))));
 
         row.setOnClickListener(new View.OnClickListener(){
             @Override
