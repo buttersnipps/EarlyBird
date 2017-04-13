@@ -34,46 +34,16 @@ public class MainActivity extends AppCompatActivity {
     Uri request;
     String src;
     String dest;
-
-    /**
-     * This class request the current service from Google
-     */
-    public class startGoogleService extends AsyncTask<String,Void,String>{
-
-        @Override
-        protected String doInBackground(String... params) {
-            String link = params[0];
-            try{
-                URL myurl = new URL(link);
-                InputStream inputStream= myurl.openConnection().getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while((line = reader.readLine()) != null)
-                {
-                    buffer.append(line+"\n");
-                }
-
-                return buffer.toString();
-            }catch(MalformedURLException e){
-                e.printStackTrace();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-    }
+    int hour;
+    int minutes;
+    long preHourTime;
+    int timeDiff=0;
 
     public void routeProcess(String src,String dest){
         this.src=src;
         this.dest=dest;
 
     }
-
-
-
 
 
     @Override
@@ -98,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
         String data = pref.getString("string_id","no id");*/
         String extracted_source = getIntent().getStringExtra("Source");
         String extracted_destination = getIntent().getStringExtra("Destination");
-        String time=getIntent().getStringExtra("My time");
+        String tripTimeInSec=getIntent().getStringExtra("My time");
         request =Uri.parse("https://maps.googleapis.com/maps/api/directions/json?origin="
         + extracted_source+"&destination="+extracted_destination+
                 "&key=AIzaSyCb14xML7qnQ4AXGQ5ymUzgQwSmvcGa3IE");
 
 
-        String data = "From" + extracted_source + "To" + extracted_destination;
+        String data = "From: " + extracted_source + "To: " + extracted_destination;
 
         if(extracted_source == null && extracted_destination == null){
             data = "No route selected";
@@ -137,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //get the value of the hours and minutes
-                int hour = timePicker.getHour();
-                int minutes =timePicker.getMinute();
+                hour = timePicker.getHour();
+                minutes =timePicker.getMinute();
 
 
 
@@ -167,15 +137,42 @@ public class MainActivity extends AppCompatActivity {
                 //set the alarm manager
                 //alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
                 // pendingIntent);
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000), pendingIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-((timeDiff + 18) * 1000),
+                        pendingIntent);
                /* alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()-(18*1000),2000,pendingIntent);*/
 
 
                 Toast.makeText(getApplicationContext(),"Alarm set to " + hour_string+ ":"
                         +minutes_string,Toast.LENGTH_LONG).show();
+                preHourTime = calendar.getTimeInMillis() - (60*60*1000);
             }
         });
 
+        if(System.currentTimeMillis() >= preHourTime)
+        {
+            //run clock modification code
+            try {
+                Intent alarmUpdateIntent = new Intent(context,AlarmUpdater.class);
+                alarmUpdateIntent.putExtra("UrlLink",request);
+                alarmUpdateIntent.putExtra("tripTimeInSec",tripTimeInSec);
+                PendingIntent alarmUpdatePendingIntent = PendingIntent.getBroadcast(context,0,alarmUpdateIntent,PendingIntent.FLAG_CANCEL_CURRENT);
+                Log.e("AlarmUpdate in Main","Cancel current alarm so update can occur.");
+                alarmManager.cancel(pendingIntent);
+                Log.e("AlarmUpdate in Main","Update alarm time.");
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,preHourTime,AlarmManager.INTERVAL_FIFTEEN_MINUTES,alarmUpdatePendingIntent);
+                timeDiff = getIntent().getIntExtra("timeDiff",0);
+                String timeString = getIntent().getStringExtra("timeString");
+                Log.e("AlarmUpdate in Main","New trip time is "+timeString);
+                data = data + " Current Trip time is "+ timeString;
+                mydata.setText(data);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+        //alarmManager.getNextAlarmClock();
 
 
         //Initilize the stop alarm button
