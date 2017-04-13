@@ -10,16 +10,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -124,7 +119,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
         @Override
         protected void onPostExecute(String s) {
             try {
-                JSONparser(s);
+                JsonParser(s);
             }
             catch (JSONException e)
             {
@@ -139,7 +134,7 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
      * @param data
      * @throws JSONException
      */
-    private void JSONparser (String data) throws JSONException
+    private void JsonParser(String data) throws JSONException
     {
         if (data==null)
         {
@@ -200,75 +195,6 @@ public class RouteActivity extends AppCompatActivity implements RouteFinderListe
 
     }
 
-    /**
-     * This function will send request to the Google directions API to fetch the current duration of the set route
-     * @param data
-     * @return
-     * @throws JSONException
-     */
-
-    public int JsonDurationParser(String data) throws JSONException{
-        int tempDuration = 0;
-        if (data==null)
-        {
-            return tempDuration;
-        }
-
-        JSONObject jsonData = new JSONObject(data);
-        JSONArray jsonRoutes  = jsonData.getJSONArray("routes");
-        for (int i=0;i<jsonRoutes.length();i++)
-        {
-            JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
-            /*
-             * This is where we retrieve the data from the JSON file we downloaded from google maps.
-             */
-            //JSONObject overview_polyline_json = jsonRoute.getJSONObject("overview_polyline");
-            JSONArray legs_json = jsonRoute.getJSONArray("legs");
-            JSONObject leg_json = legs_json.getJSONObject(0);
-            JSONObject duration_json = leg_json.getJSONObject("duration");
-            tempDuration= duration_json.getInt("value");
-
-        }
-        return tempDuration;
-    }
-
-    /**
-     *
-     * @param databaseValue int value in seconds
-     * @param realTimeValue int value in seconds
-     * @return
-     */
-    public int calculateDurationDifference(int databaseValue,int realTimeValue){
-        int seconds = realTimeValue - databaseValue;
-        if(seconds>0)
-        {
-            return seconds;
-        }
-        return 0;
-    }
-
-    public String ConvertToHrsAndMin(int timeInSec)
-    {
-
-        String time;
-        int seconds = timeInSec;
-        int hours = seconds/3600;
-        seconds = seconds%3600;
-        int minutes = seconds/60;
-        time = hours+" ";
-        if(hours>1)
-        {
-            time = time + "hrs ";
-        }
-        else
-        {
-            time = time + "hr ";
-        }
-
-        time = time + minutes +" min";
-        return time;
-
-    }
 
 
 //SQL database part
