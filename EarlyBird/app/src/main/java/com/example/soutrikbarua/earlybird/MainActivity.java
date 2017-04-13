@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 "&key=AIzaSyCb14xML7qnQ4AXGQ5ymUzgQwSmvcGa3IE");
 
 
-        String data = "From: " + extracted_source + "To: " + extracted_destination;
+        String data = "From: " + extracted_source + " To: " + extracted_destination;
 
         if(extracted_source == null && extracted_destination == null){
             data = "No route selected";
